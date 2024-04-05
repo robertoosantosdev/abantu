@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using abantu.mvc.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace abantu.mvc.Data;
@@ -9,4 +10,9 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
+
+    public DbSet<Funcionario> Funcionarios { get; set; }
+    public DbSet<Avaliacao> Avaliacoes { get; set; }
+    public DbSet<Cargo> Cargos { get; set; }
+    public DbSet<Gerente> Gerentes { get; set; }
 }
