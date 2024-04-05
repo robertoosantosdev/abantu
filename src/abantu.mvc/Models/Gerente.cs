@@ -1,8 +1,14 @@
 
+using abantu.mvc.Data;
+
 namespace abantu.mvc.Models;
 
 public class Gerente : Funcionario
 {
+    public Gerente(ApplicationDbContext db) : base(db) {
+
+    }
+    
     public Funcionario Contratar(Funcionario novoFuncionario)
     {
         throw new NotImplementedException();
