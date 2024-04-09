@@ -26,6 +26,6 @@ public class Gerente : Funcionario
 
     public override List<Funcionario> Listar()
     {
-        throw new NotImplementedException();
+        return Listar(false);
     }
 }

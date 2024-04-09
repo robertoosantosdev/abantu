@@ -16,6 +16,7 @@ namespace abantu.mvc.Models
         public Funcionario(ApplicationDbContext db)
         {
             _db = db;
+            Ativo = true;
         }
 
         public virtual List<Funcionario> Listar()
