@@ -49,7 +49,7 @@ public class FuncionarioTest
     }
 
     [Fact]
-    public void ListarTest()
+    public virtual void ListarTest()
     {
         var expected = 1;
         Funcionario funcionario = new Funcionario(_db);
