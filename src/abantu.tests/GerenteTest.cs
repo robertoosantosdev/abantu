@@ -86,5 +86,39 @@ public class GerenteTest : FuncionarioTest
         Assert.Equal(expected, actual);
     }
 
+    [Fact]
+    public void AumentarSalario()
+    {
+        var expected = 1372;
+
+        Gerente gerente = _db.Gerentes.First();
+        Funcionario funcionario = _db.Funcionarios.First(f => f.Ativo == true);
+
+        Avaliacao avaliacao6 = new Avaliacao();
+        avaliacao6.Avaliado = funcionario;
+        avaliacao6.Avaliador = gerente;
+        avaliacao6.Nota = 6;
+        avaliacao6.RealizadaEm = DateTime.Now;
+        avaliacao6.Comentario = "Razoável";
+
+        Avaliacao avaliacao9 = new Avaliacao();
+        avaliacao9.Avaliado = funcionario;
+        avaliacao9.Avaliador = gerente;
+        avaliacao9.Nota = 9;
+        avaliacao9.RealizadaEm = DateTime.Now;
+        avaliacao9.Comentario = "Muito bom!";
+
+        funcionario.Avaliacoes = new List<Avaliacao>();
+        funcionario.Avaliacoes.Add(avaliacao6);
+        funcionario.Avaliacoes.Add(avaliacao9);
+
+        _db.SaveChanges();
+
+        funcionario = gerente.AumentarSalario(funcionario, expected);
+
+        var actual = funcionario.Salario;
+
+        Assert.Equal(expected, actual);
+    }
 
 }

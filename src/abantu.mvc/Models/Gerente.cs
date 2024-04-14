@@ -35,9 +35,27 @@ public class Gerente : Funcionario
         return funcionarioDb;
     }
 
+    
     public Funcionario AumentarSalario(Funcionario funcionario, decimal novoSalario)
     {
-        throw new NotImplementedException();
+        decimal mediaMinima = 7;
+
+        Funcionario funcionarioDb = _db.Funcionarios.Single(f => f.Id == funcionario.Id);
+
+        if (funcionarioDb.Avaliacoes == null || funcionarioDb.Avaliacoes.Count == 0) {
+            throw new ApplicationException("Funcionário não possui avaliações. É necessário uma média superior a 7 para realizar um aumento.");
+        }
+
+        if (CalcularMediaAvaliacoes(funcionarioDb.Avaliacoes) > mediaMinima) {
+
+            if (funcionarioDb.Salario >= novoSalario)
+                throw new ApplicationException(string.Format("O novo salário: {1}, deve ser maior que o salário atual: {0}.", funcionarioDb.Salario, novoSalario));
+
+            funcionarioDb.Salario = novoSalario;
+            _db.SaveChanges();
+        }
+
+        return funcionarioDb;
     }
 
     public override List<Funcionario> Listar()
