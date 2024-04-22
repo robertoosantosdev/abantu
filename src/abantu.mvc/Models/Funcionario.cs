@@ -9,14 +9,17 @@ namespace abantu.mvc.Models
         public bool Ativo { get; set; }
         public decimal Salario { get; set; }
         public Cargo Cargo { get; set; }
-        public List<Avaliacao> Avaliacoes { get; set; }
+        public List<Avaliacao>? Avaliacoes { get; set; }
 
         protected ApplicationDbContext _db;
 
-        public Funcionario(ApplicationDbContext db)
+        public Funcionario () {
+            Ativo = true;
+        }
+
+        public Funcionario(ApplicationDbContext db) : this ()
         {
             _db = db;
-            Ativo = true;
         }
 
         public virtual List<Funcionario> Listar()
