@@ -48,7 +48,7 @@ namespace abantu.mvc.Controllers
         }
 
         // GET: Funcionarios/Create
-         [Authorize(Roles ="GERENTES")]
+        [Authorize(Roles = "GERENTES")]
         public IActionResult Create()
         {
             var cargos = _context.Cargos.Select(c => new SelectListItem
@@ -67,7 +67,7 @@ namespace abantu.mvc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles ="GERENTES")]
+        [Authorize(Roles = "GERENTES")]
         public async Task<IActionResult> Create([Bind("Id,Nome,Ativo,Salario")] Funcionario funcionario, string Cargos)
         {
             // Limpa as validações padrões
@@ -81,8 +81,8 @@ namespace abantu.mvc.Controllers
             // Se for válida, seguimos com o cadastro
             if (validacao)
             {
-                _context.Add(funcionario);
-                await _context.SaveChangesAsync();
+                var gerente = _context.Gerentes.Single(g => g.Email == User.Identity.Name);
+                gerente.Contratar(funcionario);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -127,8 +127,8 @@ namespace abantu.mvc.Controllers
             {
                 try
                 {
-                    _context.Update(funcionario);
-                    await _context.SaveChangesAsync();
+                    var gerente = _context.Gerentes.Single(g => g.Email == User.Identity.Name);
+                    gerente.AumentarSalario(funcionario, funcionario.Salario);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -176,10 +176,10 @@ namespace abantu.mvc.Controllers
             var funcionario = await _context.Funcionarios.FindAsync(id);
             if (funcionario != null)
             {
-                _context.Funcionarios.Remove(funcionario);
+                var gerente = _context.Gerentes.Single(g => g.Email == User.Identity.Name);
+                gerente.Demitir(funcionario);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -9,6 +9,7 @@ namespace abantu.mvc.Models
         public bool Ativo { get; set; }
         public decimal Salario { get; set; }
         public Cargo Cargo { get; set; }
+        public string Email { get; set; }
         public List<Avaliacao>? Avaliacoes { get; set; }
 
         protected ApplicationDbContext _db;
