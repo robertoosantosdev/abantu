@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using abantu.mvc.Data;
 using abantu.mvc.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace abantu.mvc.Controllers
 {
+    [Authorize]
     public class FuncionariosController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -46,6 +48,7 @@ namespace abantu.mvc.Controllers
         }
 
         // GET: Funcionarios/Create
+         [Authorize(Roles ="GERENTES")]
         public IActionResult Create()
         {
             var cargos = _context.Cargos.Select(c => new SelectListItem
@@ -64,6 +67,7 @@ namespace abantu.mvc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="GERENTES")]
         public async Task<IActionResult> Create([Bind("Id,Nome,Ativo,Salario")] Funcionario funcionario, string Cargos)
         {
             // Limpa as validações padrões

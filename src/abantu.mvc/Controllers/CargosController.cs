@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using abantu.mvc.Data;
 using abantu.mvc.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace abantu.mvc.Controllers
 {
+    [Authorize]
     public class CargosController : Controller
     {
         private readonly ApplicationDbContext _context;
