@@ -123,26 +123,9 @@ namespace abantu.mvc.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var gerente = _context.Gerentes.Single(g => g.Email == User.Identity.Name);
-                    gerente.AumentarSalario(funcionario, funcionario.Salario);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FuncionarioExists(funcionario.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
+            var gerente = _context.Gerentes.Single(g => g.Email == User.Identity.Name);
+            gerente.AumentarSalario(funcionario, funcionario.Salario);
+
             return View(funcionario);
         }
 

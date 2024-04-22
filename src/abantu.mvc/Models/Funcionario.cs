@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using abantu.mvc.Data;
 
 namespace abantu.mvc.Models
@@ -7,8 +8,10 @@ namespace abantu.mvc.Models
         public int Id { get; set; }
         public string Nome { get; set; }
         public bool Ativo { get; set; }
+        [Display(Name = "Salário")]
         public decimal Salario { get; set; }
         public Cargo Cargo { get; set; }
+        [Display(Name = "E-mail")]
         public string Email { get; set; }
         public List<Avaliacao>? Avaliacoes { get; set; }
 
