@@ -1,5 +1,6 @@
 
 using abantu.mvc.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace abantu.mvc.Models;
 
@@ -40,7 +41,7 @@ public class Gerente : Funcionario
     {
         decimal mediaMinima = 7;
 
-        Funcionario funcionarioDb = _db.Funcionarios.Single(f => f.Id == funcionario.Id);
+        Funcionario funcionarioDb = _db.Funcionarios.Include(f => f.Avaliacoes).Single(f => f.Id == funcionario.Id);
 
         if (funcionarioDb.Avaliacoes == null || funcionarioDb.Avaliacoes.Count == 0) {
             throw new ApplicationException("Funcionário não possui avaliações. É necessário uma média superior a 7 para realizar um aumento.");
