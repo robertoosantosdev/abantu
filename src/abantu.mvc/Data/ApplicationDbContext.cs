@@ -15,4 +15,21 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Avaliacao> Avaliacoes { get; set; }
     public DbSet<Cargo> Cargos { get; set; }
     public DbSet<Gerente> Gerentes { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Avaliacao>()
+            .HasOne(e => e.Avaliado)
+            .WithMany(e => e.Avaliacoes)
+            .HasForeignKey(e => e.IdAvaliado)
+            .HasPrincipalKey(e => e.Id);
+
+        modelBuilder.Entity<Avaliacao>()
+            .HasOne(e => e.Avaliador)
+            .WithMany()
+            .HasForeignKey(e => e.IdAvaliador)
+            .HasPrincipalKey(e => e.Id);
+    }
 }

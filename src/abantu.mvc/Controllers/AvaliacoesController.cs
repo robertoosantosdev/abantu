@@ -50,13 +50,18 @@ namespace abantu.mvc.Controllers
         // GET: Avaliacoes/Create
         public IActionResult Create()
         {
+            ConsultarGerentesEFuncionarios();
+
+            return View();
+        }
+
+        private void ConsultarGerentesEFuncionarios()
+        {
             var funcionarios = _context.Funcionarios.ToList();
             var gerentes = _context.Gerentes.Select(g => (Funcionario)g).ToList();
 
             ViewBag.Funcionarios = FuncionariosParaLista(funcionarios);
             ViewBag.Gerentes = FuncionariosParaLista(gerentes);
-
-            return View();
         }
 
         private List<SelectListItem> FuncionariosParaLista(List<Funcionario> funcionarios)
@@ -78,14 +83,23 @@ namespace abantu.mvc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RealizadaEm,Nota,Comentario")] Avaliacao avaliacao)
+        public async Task<IActionResult> Create([Bind("Id,RealizadaEm,Nota,Comentario")] Avaliacao avaliacao, string Funcionarios, string Gerentes)
         {
-            if (ModelState.IsValid)
+            ModelState.Clear();
+            avaliacao.IdAvaliado = int.Parse(Funcionarios);
+            avaliacao.IdAvaliador = int.Parse(Gerentes);
+
+            var validacao = TryValidateModel(avaliacao, "abantu.mvc.Models.Avaliacao");
+
+            if (validacao)
             {
                 _context.Add(avaliacao);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            ConsultarGerentesEFuncionarios();
+
             return View(avaliacao);
         }
 

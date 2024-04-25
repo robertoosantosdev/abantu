@@ -5,8 +5,10 @@ namespace abantu.mvc.Models
     public class Avaliacao
     {
         public int Id { get; set; }
-        public Funcionario Avaliado { get; set; }
-        public Gerente Avaliador { get; set; }
+        public int IdAvaliado { get; set; }
+        public int IdAvaliador { get; set; }
+        public Funcionario? Avaliado { get; set; }
+        public Gerente? Avaliador { get; set; }
         [Display(Name = "Realizada Em")]
         public DateTime RealizadaEm { get; set; }
         [Range(1, 10, ErrorMessage = "A nota deve ser entre 1 e 10.")]
