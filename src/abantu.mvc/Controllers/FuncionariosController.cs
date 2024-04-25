@@ -68,7 +68,7 @@ namespace abantu.mvc.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "GERENTES")]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Ativo,Salario")] Funcionario funcionario, string Cargos)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Email,Ativo,Salario")] Funcionario funcionario, string Cargos)
         {
             // Limpa as validações padrões
             ModelState.Clear();
@@ -86,7 +86,7 @@ namespace abantu.mvc.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Cargo = _context.Cargos.Select(c => new SelectListItem
+            ViewBag.Cargos = _context.Cargos.Select(c => new SelectListItem
             {
                 Text = c.Nome,
                 Value = c.Id.ToString()
@@ -116,7 +116,7 @@ namespace abantu.mvc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Ativo,Salario")] Funcionario funcionario)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Email,Ativo,Salario")] Funcionario funcionario)
         {
             if (id != funcionario.Id)
             {
@@ -124,9 +124,16 @@ namespace abantu.mvc.Controllers
             }
 
             var gerente = _context.Gerentes.Single(g => g.Email == User.Identity.Name);
-            gerente.AumentarSalario(funcionario, funcionario.Salario);
+            try
+            {
+                gerente.AumentarSalario(funcionario, funcionario.Salario);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (System.Exception ex)
+            {
+                return Problem(ex.Message);
+            }
 
-            return View(funcionario);
         }
 
         // GET: Funcionarios/Delete/5
@@ -156,7 +163,7 @@ namespace abantu.mvc.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Funcionarios'  is null.");
             }
-            var funcionario = await _context.Funcionarios.FindAsync(id);
+            var funcionario = await _context.Funcionarios.Include(f => f.Avaliacoes).FirstOrDefaultAsync(f => f.Id == id);
             if (funcionario != null)
             {
                 var gerente = _context.Gerentes.Single(g => g.Email == User.Identity.Name);
